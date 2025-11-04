@@ -3,7 +3,7 @@
 A modern, secure password manager that works as both a Chrome extension and Progressive Web App (PWA).
 
 ## 🚀 Live Demo
-[Launch PassKeeper](https://yourusername.github.io/PassKey/)
+[Launch PassKeeper](https://nitaimahato.github.io/PassKey/)
 
 ## ✨ Features
 - 🔐 AES-GCM encryption
@@ -12,7 +12,7 @@ A modern, secure password manager that works as both a Chrome extension and Prog
 - 📤 Export/Import passwords
 - 🎨 Modern UI with Poppins font
 - 🔍 Search functionality
-- 📋 Password generator
+- 📋 Password generators
 
 ## 🛠️ Installation
 
