@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: auto;
+      min-width: 350px;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      background: white;
+      color: #2d3748;
+      height: auto;
+      min-height: 400px;
+      display: flex;
+      position: relative;
+    }
+    
+    .sidebar {
+      width: 120px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      height: 100%;
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar.show {
+      display: flex;
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .logo {
+      padding: 16px 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      font-size: 20px;
+    }
+    
+    .menu-item {
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #4a5568;
+    }
+    
+    .menu-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+    
+    .menu-item.active {
+      background: #667eea;
+      color: white;
+    }
+    
+    .menu-item.hidden {
+      display: none;
+    }
+    
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .header {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .menu-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+      display: none;
+      width: 30px;
+      height: 30px;
+      position: relative;
+    }
+    
+    .menu-toggle.show {
+      display: inline-block;
+    }
+    
+    .menu-toggle:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+    
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #4a5568;
+      margin: 3px 0;
+      transition: 0.3s;
+      border-radius: 1px;
+    }
+    
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2d3748;
+      flex: 1;
+    }
+    
+    .content {
+      max-height: 400px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .add-section {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-group {
+      margin-bottom: 12px;
+    }
+    
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+    
+    input.invalid {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.1);
+    }
+    
+    .error-message {
+      color: #e53e3e;
+      font-size: 11px;
+      margin-top: 4px;
+      display: none;
+    }
+    
+    input:focus, textarea:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 36px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 12px;
+      width: 100%;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    .passwords-section {
+      background: rgba(26, 10, 10, 0.95);
+    }
+    
+    .section-header {
+      padding: 12px 16px 8px;
+      font-size: 11px;
+      color: #4a5568;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(248, 250, 252, 0.8);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .password-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .password-item:hover {
+      background: rgba(102, 126, 234, 0.05);
+      transform: translateX(4px);
+    }
+    
+    .password-info {
+      flex: 1;
+    }
+    
+    .site-name {
+      font-size: 14px;
+      color: #2d3748;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .username {
+      font-size: 12px;
+      color: #718096;
+      font-weight: 500;
+    }
+    
+    .remark {
+      font-size: 11px;
+      color: #a0aec0;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    
+    .password-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .btn-icon {
+      background: rgba(102, 126, 234, 0.1);
+      border: none;
+      padding: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #667eea;
+      transition: all 0.2s ease;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .btn-icon:hover {
+      background: #667eea;
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .btn-delete:hover {
+      background: #e53e3e;
+      color: white;
+    }
+    
+    .empty-state {
+      padding: 60px 24px;
+      text-align: center;
+      color: #718096;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    
+    .export-section {
+      padding: 12px 16px;
+      background: rgba(248, 250, 252, 0.8);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #667eea;
+      border: 1px solid #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-right: 8px;
+    }
+    
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      transform: translateY(-1px);
+    }
+    
+    #import-file {
+      display: none;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 12px;
+      align-items: end;
+    }
+    
+    .input-group input {
+      flex: 1;
+    }
+    
+    .btn-generate {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    
+    .btn-generate:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+    }
+    
+    .btn-view-all {
+      float: right;
+      margin: -4px 0 0 0;
+      padding: 6px 12px;
+      font-size: 11px;
+    }
+    
+    .search-container {
+      padding: 8px 16px;
+      background: rgba(248, 250, 252, 0.8);
+    }
+    
+    .search-container input {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .user-info {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      font-size: 11px;
+      color: #4a5568;
+      font-weight: 600;
+      display: none;
+      white-space: nowrap;
+    }
+    
+    .user-info.show {
+      display: block;
+    }
+    
+    .logout-btn {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      padding: 4px 8px;
+      font-size: 11px;
+      background: rgba(229, 62, 62, 0.1);
+      color: #e53e3e;
+      border: 1px solid rgba(229, 62, 62, 0.2);
+      display: none;
+    }
+    
+    .logout-btn.show {
+      display: block;
+    }
+    
+    .logout-btn:hover {
+      background: #e53e3e;
+      color: white;
+    }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+    
+    .overlay.show {
+      display: block;
+    }
+    
+    @media (min-width: 480px) {
+      .sidebar {
+        position: static;
+        transform: translateX(0);
+      }
+      
+      .sidebar.collapsed {
+        transform: translateX(-100%);
+      }
+      
+      .main-content.expanded {
+        margin-left: 0;
+      }
+      
+      .overlay {
+        display: none !important;
+      }
+    }
+    
+    @media (max-width: 479px) {
+      body {
+        width: 100vw;
+      }
+      
+      .main-content {
+        width: 100%;
+      }
+      
+      .input-group {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .input-group > div {
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+  
+  <div class="sidebar" id="sidebar">
+    <div class="logo">Pass Key</div>
+    <div class="menu-item active" data-page="add">Add</div>
+    <div class="menu-item" data-page="view">View</div>
+    <div class="menu-item" data-page="export">Export</div>
+    <div class="menu-item" data-page="import">Import</div>
+    <div class="menu-item" data-page="login">Login</div>
+    <div class="menu-item" data-page="register">Register</div>
+    <div class="menu-item" id="logout-menu" style="color: #e53e3e; border-top: 1px solid rgba(0,0,0,0.1); margin-top: auto;">Logout</div>
+  </div>
+  
+  <div class="main-content">
+    <div class="header">
+      <button type="button" class="menu-toggle" id="menu-toggle" tabindex="1">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <h1 id="page-title">Add Password</h1>
+      <div class="user-info" id="user-info">Welcome, User</div>
+    </div>
+    
+    <div class="content">
+      <!-- Add Password Page -->
+      <div class="page active" id="add-page">
+        <div class="add-section">
+          <div class="form-group">
+            <label for="site">Website</label>
+            <input type="text" id="site" tabindex="3">
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <div style="flex: 1;">
+                <label for="username">Username/Email</label>
+                <input type="email" id="username" tabindex="4">
+                <div class="error-message" id="username-error">Please enter a valid email address</div>
+              </div>
+              <div style="flex: 1;">
+                <label for="password">Password</label>
+                <div class="input-group">
+                  <input type="password" id="password" tabindex="5">
+                  <button type="button" id="generate" class="btn-generate" tabindex="6">Gen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pin">PIN (Optional)</label>
+            <input type="password" id="pin" maxlength="6" tabindex="7">
+            <div class="error-message" id="pin-error">PIN must be 4-6 digits</div>
+          </div>
+          <div class="form-group">
+            <label for="remark">Remark (Optional)</label>
+            <textarea id="remark" rows="3" tabindex="8"></textarea>
+          </div>
+          <button type="button" id="save" class="btn-primary" tabindex="9">Save</button>
+        </div>
+      </div>
+
+      <!-- View Passwords Page -->
+      <div class="page" id="view-page">
+        <div class="passwords-section">
+          <div class="section-header">
+            Saved Passwords
+            <button type="button" id="view-all" class="btn-secondary btn-view-all">View All</button>
+          </div>
+          <div class="search-container">
+            <input type="text" id="search">
+          </div>
+          <div id="passwords-list"></div>
+        </div>
+      </div>
+
+      <!-- Export Page -->
+      <div class="page" id="export-page">
+        <div class="add-section">
+          <h3>Export Passwords</h3>
+          <p>Download your passwords as a JSON file for backup.</p>
+          <button type="button" id="export" class="btn-primary">Export Passwords</button>
+          
+          <h3 style="margin-top: 20px;">Auto Backups</h3>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <label style="margin: 0; text-transform: none; font-size: 13px;">Enable Auto Backup (every 5 min)</label>
+            <input type="checkbox" id="auto-backup-toggle" style="width: auto;">
+          </div>
+          <div style="background: #f8f9fa; padding: 8px; border-radius: 4px; margin-bottom: 12px; font-size: 11px; color: #6c757d;">
+            <strong>Backup Path:</strong> Chrome Extension Local Storage<br>
+            <span style="font-family: monospace;">chrome://settings/content/all → PassKeeper Extension</span>
+          </div>
+          <div id="backup-list"></div>
+        </div>
+      </div>
+
+      <!-- Import Page -->
+      <div class="page" id="import-page">
+        <div class="add-section">
+          <h3>Import Passwords</h3>
+          <p>Upload a JSON file to import passwords.</p>
+          <button type="button" id="import" class="btn-primary">Choose File</button>
+          <input type="file" id="import-file" accept=".json">
+        </div>
+      </div>
+
+      <!-- Login Page -->
+      <div class="page" id="login-page">
+        <div class="add-section">
+          <h3>Login</h3>
+          <div class="form-group">
+            <label for="login-password">Master Password</label>
+            <input type="password" id="login-password">
+          </div>
+          <button type="button" id="login-btn" class="btn-primary">Login</button>
+          <div id="login-error" style="color: #d93025; margin-top: 8px; display: none;">Invalid password</div>
+        </div>
+      </div>
+
+      <!-- Register Page -->
+      <div class="page" id="register-page">
+        <div class="add-section">
+          <h3>Create Account</h3>
+          <div class="form-group">
+            <label for="reg-username">Username</label>
+            <input type="text" id="reg-username">
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Master Password</label>
+            <input type="password" id="reg-password">
+          </div>
+          <div class="form-group">
+            <label for="reg-confirm">Confirm Password</label>
+            <input type="password" id="reg-confirm">
+          </div>
+          <button type="button" id="register-btn" class="btn-primary">Create Account</button>
+          <div id="reg-error" style="color: #d93025; margin-top: 8px; display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
