@@ -1,0 +1,16 @@
+{
+  "name": "PassKeeper",
+  "short_name": "PassKeeper",
+  "description": "Secure password manager",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#16213e",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

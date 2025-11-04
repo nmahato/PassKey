@@ -2,6 +2,9 @@
 <html>
 <head>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#16213e">
   <style>
     * {
       margin: 0;
@@ -632,5 +635,19 @@
   </div>
 
   <script src="popup.js"></script>
+  <!-- Fallback for mobile -->
+  <script>
+    // Use mobile version if Chrome extension APIs not available
+    if (typeof chrome === 'undefined' || !chrome.storage) {
+      const script = document.createElement('script');
+      script.src = 'mobile-popup.js';
+      document.head.appendChild(script);
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 </body>
 </html>
