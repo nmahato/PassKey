@@ -3,7 +3,7 @@
 A modern, secure password manager that works as both a Chrome extension and Progressive Web App (PWA).
 
 ## 🚀 Live Demo
-[Launch PassKeeper](https://nitaimahato.github.io/PassKey/)
+[Launch PassKeeper](https://nmahato.github.io/PassKey/)
 
 ## ✨ Features
 - 🔐 AES-GCM encryption
